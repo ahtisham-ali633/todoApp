@@ -1,12 +1,9 @@
-import jwt from 'jsonwebtoken';
+import JwtAuthService from '../../App/Infrastructure/Services/jwtAuthService';
 
-const userAuth = (req, res, next) => {
+const userAuth = async (req, res, next) => {
     try {
-        const token = req.headers.authorization;
-        const decode = jwt.verify(token, 'secret')
-        console.log("decode ", decode)
-        req.userData = decode;
-        console.log("req dot userData ",req.userData)
+        await JwtAuthService.varifyToken(req);
+
         next();
     } catch (e) {
         console.log(e)

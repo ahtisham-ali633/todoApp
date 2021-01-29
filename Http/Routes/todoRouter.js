@@ -12,6 +12,6 @@ todoRouter.post('/create', userAuth, TodoController.createPost);
 
 todoRouter.put('/update/:id', userAuth, TodoController.updatePost);
 
-todoRouter.delete('/delete/:id', userAuth, TodoController.removePost);
+todoRouter.delete('/remove/:id', userAuth, TodoController.removePost);
 
 export default todoRouter;

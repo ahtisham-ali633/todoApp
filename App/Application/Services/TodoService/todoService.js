@@ -1,9 +1,9 @@
 import TodoRepository from '../../../Infrastructure/Repository/todoRepository';
 
 class TodoService {
-    static async fetchPosts() {
+    static async fetchPosts(params) {
         try{
-            const posts = await TodoRepository.fetchPosts();
+            const posts = await TodoRepository.fetchPosts(params);
             return {code: 200, status: 'success', result: posts};
         }catch(e){
             return {code: 500, status: 'error', error: e.message};
@@ -29,18 +29,18 @@ class TodoService {
         }
     }
 
-    static async updatePost(data) {
+    static async updatePost(todo) {
         try{
-            const edit = await TodoRepository.updatePost(data);
+            const edit = await TodoRepository.updatePost(todo);
             return {code: 200, status: 'success', result: edit}
         }catch(e){
             return {code: 500, status: 'error', error: e.message}
         }
     }
 
-    static async removePost(id) {
+    static async removePost(todo) {
         try{
-            const postDelete = await TodoRepository.removePost(id);
+            const postDelete = await TodoRepository.removePost(todo);
             return {code: 200, status: 'success', result: postDelete}
         }catch(e){
             return {code: 500, status: 'error', error: e.message}

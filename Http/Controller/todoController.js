@@ -5,7 +5,7 @@ import UpdatePostDTO from '../../App/Application/Services/TodoService/updatePost
 
 class TodoController {
     static async fetchPosts(req, res,) {
-        const posts = await TodoService.fetchPosts();
+        const posts = await TodoService.fetchPosts(req.query);
         res.status(posts.code).json(posts);
     }
 

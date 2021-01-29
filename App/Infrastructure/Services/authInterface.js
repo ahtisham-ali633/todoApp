@@ -10,6 +10,11 @@ class AuthInterface {
     verifyUserCredentials() {
         throw new Error("not implemented");
     }
+
+    encryptPassword() {
+        throw new Error("not implemented");
+    }
+
 }
 
 export default AuthInterface

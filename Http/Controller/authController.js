@@ -15,9 +15,12 @@ class AuthController {
 
     static async signup(req, res) {
         try {
+            console.log("controller",req.body)
             const user = await AuthService.signup(req.body);
+            
             res.status(200).send({result: user, msg: "user register successfully"});
         } catch (e) {
+            console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",e);
             res.send({ msg: e.message });
         }
     }

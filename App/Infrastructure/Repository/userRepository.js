@@ -6,6 +6,7 @@ class UserRepository {
     }
 
     static async register(data) {
+        console.log("user repro", data)
         const user = new User(data);
         return await user.save();
     }

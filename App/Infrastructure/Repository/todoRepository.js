@@ -1,14 +1,23 @@
 import Post from '../Models/Mongoose/todoModel';
 import TodoEntity from '../../Domain/Entites/todoItemEntity';
+import PaginationData from '../Utils/paginationData';
+import PaginationOption from '../Utils/paginationOption';
 
 class TodoRepository {
-    static async fetchPosts() {
-        const allPosts = await Post.find();
+    static async fetchPosts(params) {
+        const totalPost = await Post.count();
+        console.log(totalPost)
+
+        const paginationData = new PaginationData(new PaginationOption(params.page, params.limit), totalPost);
+
+        const allPosts = await Post.find()
+        .limit(paginationData.paginationOption.limit())
+        .skip(paginationData.paginationOption.offset());
         const posts = allPosts.map(post => {
-            console.log("todorepository ", post)
-            return TodoEntity.createFromObject(post);
+            // return TodoEntity.createFromObject(post);
+            paginationData.addItem(TodoEntity.createFromObject(post))
         }) 
-        return posts;
+        return paginationData.paginationItems();
     }
 
     static async fetchById({id}) {
@@ -16,24 +25,25 @@ class TodoRepository {
         return TodoEntity.createFromObject(post)
     }
 
-    static async createPost({title, description}) {
-        const post = new Post({
-            title: title,
-            description: description
-        })
-        
-        await post.save();
-        return post;
+    static async createPost(data) {
+        const post = new Post(data)
+        post.todoId = TodoEntity.generateId();
+        const newPost = await post.save();
+        return TodoEntity.createFromObject(newPost);
+
     }
 
-    static async updatePost({id, title, description}) {
-        await Post.findByIdAndUpdate({ _id: id }, { title: title, description: description }, { new: true });
-        return true;
+    static async updatePost(todo) {
+        const updatedTodo = await Post.findByIdAndUpdate({ _id: todo.id }, { title: todo.title, description: todo.description }, { new: true });
+
+        if(updatedTodo) {
+            return TodoEntity.createFromObject(updatedTodo);
+        }
     }
 
-    static async removePost({id}) {
-        await Post.findByIdAndDelete({ _id: id });
-        return true;
+    static async removePost(todo) {
+        const result = await Post.findByIdAndDelete({ _id: todo.id});
+        return result;
     }
 }
 
